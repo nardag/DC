@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<wniosek podpis_wnioskodawcy="" data_zlozenia="2015-10-15">
+    <wnioskodawca miejsce_dla_dziecka="true">
+        <wydzial>MECH</wydzial>
+        <nr_albumu>144001</nr_albumu>
+        <na_rok_akademicki>2015/2016</na_rok_akademicki>
+        <nazwisko>Cygan-Merlin</nazwisko>
+        <imie>Celina</imie>
+        <przewidywany_sem_studiow>7</przewidywany_sem_studiow>
+        <rodzaj_studiow>I stopnia</rodzaj_studiow>
+        <kierunek>Inżynieria materiałowa</kierunek>
+        <email>celcygan@student.pg.edu.pl</email>
+        <telefon>792-932-333</telefon>
+        <adres>
+            <ulica>Kochanowskiego</ulica>
+            <nr>34</nr>
+            <kod_pocztowy>82-500</kod_pocztowy>
+            <miejscowosc>Kwidzyn</miejscowosc>
+        </adres>
+        <wojewodztwo>pomorskie</wojewodztwo>
+        <powiat>kwidzyński</powiat>
+        <nr_ds_priorytet1>9</nr_ds_priorytet1>
+        <nr_ds_priorytet2>3</nr_ds_priorytet2>
+        <malzonek miejsce_dla="true">    
+            <imie_i_nazwisko>Artur Merlin</imie_i_nazwisko>            
+            <status>STUDENT INNEJ UCZELNI</status>
+        </malzonek>
+        <praca_na_rzecz_uczelni>czlonek WRS MECH</praca_na_rzecz_uczelni>
+    </wnioskodawca>
+    <rodzina_wnioskodawcy dochod_utracony="true" dochod_uzyskany="true">
+        <czlonek_rodziny>
+            <nazwisko>Cygan-Merlin</nazwisko>
+            <imie>Celina</imie>
+            <wiek>22</wiek>
+            <st_pokrewienstwa>WNIOSKODAWCA</st_pokrewienstwa>
+            <status_zatrudnienia>POLITECHNIKA GDAŃSKA</status_zatrudnienia>
+        </czlonek_rodziny>
+        <czlonek_rodziny>
+            <nazwisko>Merlin</nazwisko>
+            <imie>Artur</imie>
+            <wiek>22</wiek>
+            <st_pokrewienstwa>MĄŻ</st_pokrewienstwa>
+            <status_zatrudnienia>UCZY SIĘ</status_zatrudnienia>
+        </czlonek_rodziny>
+        <czlonek_rodziny>
+            <nazwisko>Merlin</nazwisko>
+            <imie>Erwin</imie>
+            <wiek>1</wiek>
+            <st_pokrewienstwa>SYN</st_pokrewienstwa>
+            <status_zatrudnienia>INNE (JEST NIEMOWLĘCIEM)</status_zatrudnienia>
+        </czlonek_rodziny>
+    </rodzina_wnioskodawcy>
+</wniosek>

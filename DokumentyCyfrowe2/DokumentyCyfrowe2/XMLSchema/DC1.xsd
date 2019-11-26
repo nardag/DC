@@ -1,0 +1,229 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+   <xsd:annotation>
+      <xsd:documentation xml:lang="pl">
+         XML Schema do pliku wniosku o przyznanie miejsca w domu studenckim Politechniki Gdańskiej.
+      </xsd:documentation>
+   </xsd:annotation>
+
+   <xsd:element name="wniosek" type="typ_wniosku"/>
+
+   <xsd:complexType name="typ_wniosku">
+      <xsd:sequence>
+         <xsd:element name="wnioskodawca" type="wnioskodawca_type"/>               
+         <xsd:element name="rodzina_wnioskodawcy" type="rodzina_wnioskodawcy_type"/>   
+         <xsd:element name="pouczenie" type="xsd:string" minOccurs="0" maxOccurs="0"
+         fixed="Wnoszę o przyznanie mi prawa do zamieszkania w Domach Studenckich PG.
+         Oświadczam, iż zapoznałem się z Regulaminem przyznawania prawa do zamieszkania w Domach Studenckich Politechniki Gdańskiej.
+         Oświadczam, że gospodarstwo domowe nie osiąga dochodów ze źródeł innych niż wskazane.
+         Uprzedzony o odpowiedzialności karnej za przestępstwo wyłudzenia nienależnych świadczeń finansowych (art. 286 KK) oświadczam, że wykazane
+         dane są kompletne i zgodne ze stanem faktycznym.
+         Oświadczam, iż uprzedzono mnie, że w przypadku, gdy okaże się, że otrzywąłem/łam prawo do zamieszkania w Domu Studenckim PG na podstawie
+         nieprawdziwych danych, będą wyciągnięte wobec mnie konsekwencje dyscyplinarne, do wydalenia z Uczelni włącznie, niezależnie od skutków cywilnoprawnych"/>
+      </xsd:sequence>
+      <xsd:attribute name="data_zlozenia" type="xsd:date"/>
+   </xsd:complexType>
+
+
+    <xsd:simpleType name="wydzial_type">
+       <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="ARCH"/>
+            <xsd:enumeration value="CHEM"/>
+            <xsd:enumeration value="ETI"/>
+            <xsd:enumeration value="EIA"/>
+            <xsd:enumeration value="FTIMS"/>
+            <xsd:enumeration value="ILIŚ"/>
+            <xsd:enumeration value="MECH"/>
+            <xsd:enumeration value="OIO"/>
+            <xsd:enumeration value="ZIE"/>
+       </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="na_rok_akademicki_type">
+       <xsd:restriction base="xsd:string">
+            <xsd:pattern value="20\d{2}/20\d{2}"/>
+       </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="przewidywany_sem_studiow_type">
+       <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="1"/>
+            <xsd:maxInclusive value="7"/>
+       </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="rodzaj_studiow_type">
+       <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="I stopnia"/>
+            <xsd:enumeration value="II stopnia"/>
+       </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:simpleType name="kierunek_type">
+       <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="Architektura"/>
+            <xsd:enumeration value="Gospodarka przestrzenna"/>
+            <xsd:enumeration value="Biotechnologia"/>
+            <xsd:enumeration value="Chemia"/>
+            <xsd:enumeration value="Chemia budowlana"/>
+            <xsd:enumeration value="Inżynieria i technologie nośników energii"/>
+            <xsd:enumeration value="Inżynieria materiałowa"/>
+            <xsd:enumeration value="Konserwacja i degradacja materiałów"/>
+            <xsd:enumeration value="Korozja"/>
+            <xsd:enumeration value="Technologia chemiczna"/>
+            <xsd:enumeration value="Zielone technologie i monitoring"/>
+            <xsd:enumeration value="Automatyka i robotyka"/>
+            <xsd:enumeration value="Elektronika i telekomunikacja"/>
+            <xsd:enumeration value="Informatyka"/>
+            <xsd:enumeration value="Inżynieria biomedyczna"/>
+            <xsd:enumeration value="Inżynieria danych"/>
+            <xsd:enumeration value="Technologie kosmiczne i satelitarne"/>
+            <xsd:enumeration value="Automatyka i robotyka"/>
+            <xsd:enumeration value="Elektrotechnika"/>
+            <xsd:enumeration value="Energetyka"/>
+            <xsd:enumeration value="Fizyka techniczna"/>
+            <xsd:enumeration value="Inżynieria materiałowa"/>
+            <xsd:enumeration value="Matematyka"/>
+            <xsd:enumeration value="Nanotechnologia"/>
+            <xsd:enumeration value="Podstawy nauk technicznych"/>
+            <xsd:enumeration value="Budownictwo"/>
+            <xsd:enumeration value="Geodezja i kartografia"/>
+            <xsd:enumeration value="Inżynieria środowiska"/>
+            <xsd:enumeration value="Transport"/>
+            <xsd:enumeration value="Techniki geodezyjne w inżynierii"/>
+            <xsd:enumeration value="Energetyka"/>
+            <xsd:enumeration value="Inżynieria mechaniczno-medyczna"/>
+            <xsd:enumeration value="Mechanika i budowa maszyn"/>
+            <xsd:enumeration value="Mechatronika"/>
+            <xsd:enumeration value="Zarządzanie i inżynieria produkcji"/>
+            <xsd:enumeration value="Energetyka"/>
+            <xsd:enumeration value="Transport"/>
+            <xsd:enumeration value="Oceanotechnika"/>
+            <xsd:enumeration value="Techniki geodezyjne w inżynierii"/>
+            <xsd:enumeration value="Analityka gospodarcza"/>
+            <xsd:enumeration value="Ekonomia"/>
+            <xsd:enumeration value="Europeistyka"/>
+            <xsd:enumeration value="Zarządzanie"/>
+            <xsd:enumeration value="Zarządzanie inżynierskie"/>
+       </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="email_type">
+       <xsd:restriction base="xsd:string">
+            <xsd:pattern value="[a-zA-z0-9]{7,8}@student.pg.edu.pl"/>
+       </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="telefon_type">
+       <xsd:restriction base="xsd:string">
+            <xsd:pattern value="\d{3}-\d{3}-\d{3}"/>
+       </xsd:restriction>
+    </xsd:simpleType>
+
+   <xsd:simpleType name="kod_pocztowy_type">
+      <xsd:restriction base="xsd:string">
+         <xsd:pattern value="\d{2}-\d{3}"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+
+   <xsd:simpleType name="wojewodztwo_type">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="dolnoslaskie"/>
+         <xsd:enumeration value="kujawsko-pomorskie"/>
+         <xsd:enumeration value="lubelskie"/>
+         <xsd:enumeration value="lubuskie"/>
+         <xsd:enumeration value="lodzkie"/>
+         <xsd:enumeration value="malopolskie"/>
+         <xsd:enumeration value="mazowieckie"/>
+         <xsd:enumeration value="opolskie"/>
+         <xsd:enumeration value="podkarpackie"/>
+         <xsd:enumeration value="podlaskie"/>
+         <xsd:enumeration value="pomorskie"/>
+         <xsd:enumeration value="slaskie"/>
+         <xsd:enumeration value="swietokrzyskie"/>
+         <xsd:enumeration value="warminsko-mazurskie"/>
+         <xsd:enumeration value="wielkopolskie"/>
+         <xsd:enumeration value="zachodniopomorskie"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+
+   <xsd:simpleType name="nr_ds_priorytet_type">
+      <xsd:restriction base="xsd:integer">
+         <xsd:minInclusive value="1"/>
+         <xsd:maxInclusive value="12"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+
+   <xsd:simpleType name="status_malzonka_type">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="STUDENTEM PG"/>
+         <xsd:enumeration value="STUDENT INNEJ UCZELNI"/>
+         <xsd:enumeration value="NIE JEST STUDENTEM"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+
+   <xsd:complexType name="wnioskodawca_type">
+      <xsd:sequence>
+         <xsd:element name="wydzial" type="wydzial_type" />
+         <xsd:element name="nr_albumu" type="nr_albumu_type"/>
+         <xsd:element name="na_rok_akademicki" type="na_rok_akademicki_type"/>
+         <xsd:element name="nazwisko" type="xsd:string"/>
+         <xsd:element name="imie" type="xsd:string"/>
+         <xsd:element name="przewidywany_sem_studiow" type="przewidywany_sem_studiow_type"/>
+         <xsd:element name="rodzaj_studiow" type="rodzaj_studiow_type"/>
+         <xsd:element name="kierunek" type="kierunek_type"/>
+         <xsd:element name="email" type="email_type"/>
+         <xsd:element name="telefon" type="telefon_type" minOccurs="0"/>
+         <xsd:element name="adres" type="adres_type"/>
+         <xsd:element name="wojewodztwo" type="wojewodztwo_type"/>
+         <xsd:element name="powiat" type="xsd:string"/>
+         <xsd:element name="gmina" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="nr_ds_priorytet1" type="nr_ds_priorytet_type" minOccurs="0"/>
+         <xsd:element name="nr_ds_priorytet2" type="nr_ds_priorytet_type" minOccurs="0"/>
+         <xsd:element name="malzonek" type="malzonek_type" minOccurs="0"/>         
+         <xsd:element name="praca_na_rzecz_uczelni" type="xsd:string" minOccurs="0"/> 
+      </xsd:sequence>
+      <xsd:attribute name="miejsce_dla_dziecka" type="xsd:boolean"/>
+   </xsd:complexType>
+
+   <xsd:complexType name="adres_type">
+      <xsd:sequence>
+        <xsd:element name="ulica" type="xsd:string"/>
+        <xsd:element name="nr" type="xsd:positiveInteger"/>
+        <xsd:element name="kod_pocztowy" type="kod_pocztowy_type"/>
+        <xsd:element name="miejscowosc" type="xsd:string"/>
+      </xsd:sequence>
+   </xsd:complexType>
+
+   <xsd:complexType name="malzonek_type">
+      <xsd:sequence>
+        <xsd:element name="imie_i_nazwisko" type="xsd:string"/>
+          <xsd:element name="status" type="status_malzonka_type"/>
+      </xsd:sequence>
+      <xsd:attribute name="miejsce_dla" type="xsd:boolean"/>
+   </xsd:complexType>
+
+   <xsd:complexType name="rodzina_wnioskodawcy_type">
+      <xsd:sequence>
+         <xsd:element name="czlonek_rodziny" type="czlonek_rodziny_type" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      <xsd:attribute name="dochod_utracony" type="xsd:boolean"/>
+      <xsd:attribute name="dochod_uzyskany" type="xsd:boolean"/>
+   </xsd:complexType>
+
+   <xsd:complexType name="czlonek_rodziny_type">
+      <xsd:sequence>
+        <xsd:element name="nazwisko" type="xsd:string"/>
+        <xsd:element name="imie" type="xsd:string"/>
+        <xsd:element name="wiek" type="xsd:positiveInteger"/>
+        <xsd:element name="st_pokrewienstwa" type="xsd:string"/>
+        <xsd:element name="status_zatrudnienia" type="xsd:string"/>
+      </xsd:sequence>
+   </xsd:complexType>
+
+   <xsd:simpleType name="nr_albumu_type">
+      <xsd:restriction base="xsd:integer">
+         <xsd:totalDigits value="6"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+</xsd:schema>
