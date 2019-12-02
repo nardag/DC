@@ -12,3 +12,17 @@ C:\Users\me\Documents\DokumentyCyfrowe2\DokumentyCyfrowe2\obj\Debug\DokumentyCyf
 C:\Users\me\Documents\DokumentyCyfrowe2\DokumentyCyfrowe2\obj\Debug\DokumentyCyfrowe2.csproj.GenerateResource.cache
 C:\Users\me\Documents\DokumentyCyfrowe2\DokumentyCyfrowe2\obj\Debug\DokumentyCyfrowe2.exe
 C:\Users\me\Documents\DokumentyCyfrowe2\DokumentyCyfrowe2\obj\Debug\DokumentyCyfrowe2.pdb
+C:\Users\me\Documents\DC\DokumentyCyfrowe2\DokumentyCyfrowe2\bin\Debug\DokumentyCyfrowe2.exe.config
+C:\Users\me\Documents\DC\DokumentyCyfrowe2\DokumentyCyfrowe2\bin\Debug\DokumentyCyfrowe2.exe
+C:\Users\me\Documents\DC\DokumentyCyfrowe2\DokumentyCyfrowe2\bin\Debug\DokumentyCyfrowe2.pdb
+C:\Users\me\Documents\DC\DokumentyCyfrowe2\DokumentyCyfrowe2\obj\Debug\DokumentyCyfrowe2.csprojAssemblyReference.cache
+C:\Users\me\Documents\DC\DokumentyCyfrowe2\DokumentyCyfrowe2\obj\Debug\MainWindow.g.cs
+C:\Users\me\Documents\DC\DokumentyCyfrowe2\DokumentyCyfrowe2\obj\Debug\App.g.cs
+C:\Users\me\Documents\DC\DokumentyCyfrowe2\DokumentyCyfrowe2\obj\Debug\DokumentyCyfrowe2_MarkupCompile.cache
+C:\Users\me\Documents\DC\DokumentyCyfrowe2\DokumentyCyfrowe2\obj\Debug\DokumentyCyfrowe2_MarkupCompile.lref
+C:\Users\me\Documents\DC\DokumentyCyfrowe2\DokumentyCyfrowe2\obj\Debug\MainWindow.baml
+C:\Users\me\Documents\DC\DokumentyCyfrowe2\DokumentyCyfrowe2\obj\Debug\DokumentyCyfrowe2.g.resources
+C:\Users\me\Documents\DC\DokumentyCyfrowe2\DokumentyCyfrowe2\obj\Debug\DokumentyCyfrowe2.Properties.Resources.resources
+C:\Users\me\Documents\DC\DokumentyCyfrowe2\DokumentyCyfrowe2\obj\Debug\DokumentyCyfrowe2.csproj.GenerateResource.cache
+C:\Users\me\Documents\DC\DokumentyCyfrowe2\DokumentyCyfrowe2\obj\Debug\DokumentyCyfrowe2.exe
+C:\Users\me\Documents\DC\DokumentyCyfrowe2\DokumentyCyfrowe2\obj\Debug\DokumentyCyfrowe2.pdb
