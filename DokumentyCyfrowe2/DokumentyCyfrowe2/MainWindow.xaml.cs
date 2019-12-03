@@ -35,18 +35,8 @@ namespace DokumentyCyfrowe2
         public MainWindow()
         {
             InitializeComponent();
-            //fileName = "C:\\Users\\me\\Documents\\DC\\DokumentyCyfrowe2\\DokumentyCyfrowe2\\SampleXml\\DC1_3.xml";
-            
-            //serializacja xml -> obiekt
-            //XmlSerializer serializer = new XmlSerializer(typeof(typ_wniosku));
-            //FileStream fs = new FileStream(fileName, FileMode.Open);
-            //XmlReader reader = XmlReader.Create(fs);
-
-            //dokument = (typ_wniosku)serializer.Deserialize(reader);
-
-            //fs.Close();
+    
             LoadEmpty();
-           // Load();
         }
 
         private void OtworzButton_Click(object sender, RoutedEventArgs e)
@@ -66,6 +56,83 @@ namespace DokumentyCyfrowe2
 
             Load();
         }
+
+        private void ZapiszButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var memoryStream = new MemoryStream();
+                var xmlWriter = XmlWriter.Create(memoryStream);
+
+                XmlSerializer serializer = new XmlSerializer(dokument.GetType());
+                serializer.Serialize(xmlWriter, dokument);
+
+                XmlReaderSettings settings = new XmlReaderSettings();
+                settings.ValidationType = ValidationType.Schema;
+
+                memoryStream.Position = 0;
+
+                var xmlReader = XmlReader.Create(memoryStream, settings);
+
+                var xmlDoc = new XmlDocument();
+                xmlDoc.Load(xmlReader);
+                xmlDoc.Schemas.Add(null, "..\\..\\XMLSchema\\DC1.xsd");
+
+                ValidationEventHandler eventHandler = new ValidationEventHandler(ValidationEventHandler);
+
+                xmlDoc.Validate(eventHandler);
+
+                xmlWriter.Flush();
+
+                if (true) //TODO if valdation succeeds
+                {
+                    // save file
+                    SaveFileDialog saveFileDialog = new SaveFileDialog();
+                    if (saveFileDialog.ShowDialog() == true)
+                    {
+                        //seralizacja dokument w formie memorystream do xml
+                        FileStream stream = new FileStream(saveFileDialog.FileName, FileMode.OpenOrCreate);
+
+                        memoryStream.Position = 0;
+
+                        memoryStream.CopyTo(stream);
+
+                        stream.Close();                                               
+                    }
+                }
+                else
+                {
+                    //TODO komunikat w oknie, ktorerzeczy poprawic
+                    MessageBox.Show("Niepoprwany format danych dla:", "Exception Sample", MessageBoxButton.OK, MessageBoxImage.Warning);
+
+
+                }
+
+                memoryStream.Close();
+            }
+            catch (NullReferenceException ex)
+            {                
+                MessageBox.Show("Probujesz zapisac pusty dokument. Wypelnij pola.", "Exception Sample", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            
+        }
+
+        static void ValidationEventHandler(object sender, ValidationEventArgs e)
+        {
+            //TODO 
+
+            //switch (e.Severity)
+            //{
+            //    case XmlSeverityType.Error:
+            //        Console.WriteLine("Error: {0}", e.Message);
+            //        break;
+            //    case XmlSeverityType.Warning:
+            //        Console.WriteLine("Warning {0}", e.Message);
+            //        break;
+            //}
+
+        }
+
         private void LoadEmpty()
         {
             foreach (wydzial_type w in Enum.GetValues(typeof(wydzial_type)))
@@ -94,7 +161,6 @@ namespace DokumentyCyfrowe2
             }
 
             datazlozeniawniosku.SelectedDate = DateTime.Today;
-            //pouczenie.Content =  new TextBlock() { Text = dokument.pouczenie, TextWrapping = TextWrapping.Wrap };
 
 
             czlonkowie.Add(new czlonek_rodziny_type { status_zatrudnienia="POLITECHNIKA GDANSKA", st_pokrewienstwa="WNIOSKODAWCA"  });
@@ -153,7 +219,7 @@ namespace DokumentyCyfrowe2
                         malzonekTAK.IsChecked = true;
                     else
                         malzonekNIE.IsChecked = true;
-                    //wyszarz pola malzonka
+                    //TODO wyszarz pola malzonka
                 }
 
                 MalzImieNazw.Text = dokument.wnioskodawca.malzonek.imie_i_nazwisko;
