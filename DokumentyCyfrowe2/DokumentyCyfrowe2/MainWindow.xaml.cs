@@ -31,7 +31,8 @@ namespace DokumentyCyfrowe2
         public typ_wniosku dokument;
         string fileName = "";
         List<czlonek_rodziny_type> czlonkowie = new List<czlonek_rodziny_type>();
-
+        static string msgError;
+        static int numErrors;
         public MainWindow()
         {
             InitializeComponent();
@@ -62,8 +63,14 @@ namespace DokumentyCyfrowe2
             try
             {
                 var memoryStream = new MemoryStream();
-                var xmlWriter = XmlWriter.Create(memoryStream);
 
+                XmlWriterSettings wsettings = new XmlWriterSettings();
+                wsettings.Indent = true;
+                wsettings.IndentChars = ("\t");
+                wsettings.OmitXmlDeclaration = true;
+
+                var xmlWriter = XmlWriter.Create(memoryStream, wsettings);
+                
                 XmlSerializer serializer = new XmlSerializer(dokument.GetType());
                 serializer.Serialize(xmlWriter, dokument);
 
@@ -82,55 +89,47 @@ namespace DokumentyCyfrowe2
 
                 xmlDoc.Validate(eventHandler);
 
+                if (numErrors > 0)
+                    throw new Exception(msgError);
+
                 xmlWriter.Flush();
 
-                if (true) //TODO if valdation succeeds
+                // save file
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                if (saveFileDialog.ShowDialog() == true)
                 {
-                    // save file
-                    SaveFileDialog saveFileDialog = new SaveFileDialog();
-                    if (saveFileDialog.ShowDialog() == true)
-                    {
-                        //seralizacja dokument w formie memorystream do xml
-                        FileStream stream = new FileStream(saveFileDialog.FileName, FileMode.OpenOrCreate);
+                    //seralizacja dokument w formie memorystream do xml
+                    FileStream stream = new FileStream(saveFileDialog.FileName, FileMode.OpenOrCreate);
 
-                        memoryStream.Position = 0;
+                    memoryStream.Position = 0;
 
-                        memoryStream.CopyTo(stream);
-
-                        stream.Close();                                               
-                    }
+                    memoryStream.CopyTo(stream);
+                    
+                    stream.Close();                                               
                 }
-                else
-                {
-                    //TODO komunikat w oknie, ktorerzeczy poprawic
-                    MessageBox.Show("Niepoprwany format danych dla:", "Exception Sample", MessageBoxButton.OK, MessageBoxImage.Warning);
-
-
-                }
-
                 memoryStream.Close();
             }
             catch (NullReferenceException ex)
-            {                
+            {
                 MessageBox.Show("Probujesz zapisac pusty dokument. Wypelnij pola.", "Exception Sample", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-            
+            catch (Exception ex)
+            {
+                MessageBox.Show(msgError, "Exception Sample", MessageBoxButton.OK, MessageBoxImage.Warning);
+                numErrors = 0;
+                msgError = "";
+            }
+
         }
 
         static void ValidationEventHandler(object sender, ValidationEventArgs e)
         {
             //TODO 
-
-            //switch (e.Severity)
-            //{
-            //    case XmlSeverityType.Error:
-            //        Console.WriteLine("Error: {0}", e.Message);
-            //        break;
-            //    case XmlSeverityType.Warning:
-            //        Console.WriteLine("Warning {0}", e.Message);
-            //        break;
-            //}
-
+            if (!e.Exception.Message.Contains("pouczenie"))
+            {
+                msgError = msgError + "\r\n" + e.Message + " " + e.Exception.LineNumber;
+                numErrors++;
+            }
         }
 
         private void LoadEmpty()
