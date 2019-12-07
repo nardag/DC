@@ -16,64 +16,64 @@
         <Label Content="Na rok akademicki" HorizontalAlignment="Left" Margin="536,57,0,0" VerticalAlignment="Top"/>
         <Label Content="Nazwisko" HorizontalAlignment="Left" Margin="320,91,0,0" VerticalAlignment="Top"/>
         <TextBox HorizontalAlignment="Left" Height="23" Margin="390,60,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="Album" HorizontalAlignment="Left" Height="23" Margin="390,60,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="Imie" HorizontalAlignment="Left" Height="23" Margin="126,86,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="180" RenderTransformOrigin="0.5,0.5" />
-        <TextBox x:Name="Nazwisko" HorizontalAlignment="Left" Height="23" Margin="390,91,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="380"/>
+        <TextBox x:Name="Album" HorizontalAlignment="Left" Height="23" Margin="390,60,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" TextChanged="Album_TextChanged" />
+        <TextBox x:Name="Imie" HorizontalAlignment="Left" Height="23" Margin="126,86,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="180" RenderTransformOrigin="0.5,0.5" TextChanged="Imie_TextChanged"/>
+        <TextBox x:Name="Nazwisko" HorizontalAlignment="Left" Height="23" Margin="390,91,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="380" TextChanged="Nazwisko_TextChanged"/>
         <Label Content="Przewidywany semestr studiów" HorizontalAlignment="Left" Margin="31,123,0,0" VerticalAlignment="Top" Width="182"/>
         <Label Content="Rodzaj studiów" HorizontalAlignment="Left" Margin="279,123,0,0" VerticalAlignment="Top" Width="91"/>
-        <RadioButton x:Name="st1" GroupName="rodzajst" Content="I stopnia" HorizontalAlignment="Left" Margin="390,129,0,0" VerticalAlignment="Top" IsChecked="true"/>
-        <RadioButton x:Name="st2" GroupName="rodzajst" Content="II stopnia" HorizontalAlignment="Left" Margin="390,149,0,0" VerticalAlignment="Top"/>
+        <RadioButton x:Name="st1" GroupName="rodzajst" Content="I stopnia" HorizontalAlignment="Left" Margin="390,129,0,0" VerticalAlignment="Top" IsChecked="false" Checked="st1_Checked"/>
+        <RadioButton x:Name="st2" GroupName="rodzajst" Content="II stopnia" HorizontalAlignment="Left" Margin="390,149,0,0" VerticalAlignment="Top" Checked="st2_Checked"/>
         <Label Content="Kierunek" HorizontalAlignment="Left" Margin="484,123,0,0" VerticalAlignment="Top" Width="62"/>
-        <ComboBox x:Name="kierunek" HorizontalAlignment="Left" Margin="560,129,0,0" VerticalAlignment="Top" Width="210"/>
-        <ComboBox x:Name="przewidywanysemestr" HorizontalAlignment="Left" Margin="218,126,0,0" VerticalAlignment="Top" Width="56"/>
-        <ComboBox x:Name="Rokakademicki" HorizontalAlignment="Left" Margin="648,60,0,0" VerticalAlignment="Top" Width="113"/>
-        <ComboBox x:Name="Wydzial" HorizontalAlignment="Left" Margin="126,57,0,0" VerticalAlignment="Top" Width="180"/>
+        <ComboBox x:Name="kierunek" HorizontalAlignment="Left" Margin="560,129,0,0" VerticalAlignment="Top" Width="210" SelectionChanged="kierunek_SelectionChanged"/>
+        <ComboBox x:Name="przewidywanysemestr" HorizontalAlignment="Left" Margin="218,126,0,0" VerticalAlignment="Top" Width="56" SelectionChanged="przewidywanysemestr_SelectionChanged"/>
+        <ComboBox x:Name="Rokakademicki" HorizontalAlignment="Left" Margin="648,60,0,0" VerticalAlignment="Top" Width="113" SelectionChanged="Rokakademicki_SelectionChanged"/>
+        <ComboBox x:Name="Wydzial" HorizontalAlignment="Left" Margin="126,57,0,0" VerticalAlignment="Top" Width="180" SelectionChanged="Wydzial_SelectionChanged"/>
         <Label Content="E-mail" HorizontalAlignment="Left" Margin="31,174,0,0" VerticalAlignment="Top" Width="51"/>
-        <TextBox x:Name="email" HorizontalAlignment="Left" Height="23" Margin="82,178,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="344" RenderTransformOrigin="0.5,0.5"/>
+        <TextBox x:Name="email" HorizontalAlignment="Left" Height="23" Margin="82,178,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="344" RenderTransformOrigin="0.5,0.5" TextChanged="email_TextChanged"/>
         <Label Content="Tel. kontaktowy&#xD;&#xA;" HorizontalAlignment="Left" Margin="441,175,0,0" VerticalAlignment="Top" Width="95" Height="26"/>
-        <TextBox x:Name="telefon" HorizontalAlignment="Left" Height="23" Margin="541,176,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="229" RenderTransformOrigin="0.5,0.5"/>
+        <TextBox x:Name="telefon" HorizontalAlignment="Left" Height="23" Margin="541,176,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="229" RenderTransformOrigin="0.5,0.5" TextChanged="telefon_TextChanged"/>
         <Label Content="Adres zameldowania [korespondencyjny]" HorizontalAlignment="Left" Margin="31,215,0,0" VerticalAlignment="Top" Width="230"/>
         <Label Content="Ulica" HorizontalAlignment="Left" Margin="31,241,0,0" VerticalAlignment="Top" Width="51"/>
-        <TextBox x:Name="ulica" HorizontalAlignment="Left" Height="23" Margin="82,241,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="256" RenderTransformOrigin="0.5,0.5"/>
+        <TextBox x:Name="ulica" HorizontalAlignment="Left" Height="23" Margin="82,241,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="256" RenderTransformOrigin="0.5,0.5" TextChanged="ulica_TextChanged"/>
         <Label Content="Nr" HorizontalAlignment="Left" Margin="343,240,0,0" VerticalAlignment="Top" Width="27" RenderTransformOrigin="5.173,0.5"/>
-        <TextBox x:Name="nr" HorizontalAlignment="Left" Height="23" Margin="385,241,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="52" RenderTransformOrigin="0.5,0.5"/>
+        <TextBox x:Name="nr" HorizontalAlignment="Left" Height="23" Margin="385,241,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="52" RenderTransformOrigin="0.5,0.5" TextChanged="nr_TextChanged"/>
         <Label Content="Kod pocztowy" HorizontalAlignment="Left" Margin="31,267,0,0" VerticalAlignment="Top" Width="88"/>
-        <TextBox x:Name="kodpocz" HorizontalAlignment="Left" Height="23" Margin="119,271,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="69" RenderTransformOrigin="0.5,0.5"/>
+        <TextBox x:Name="kodpocz" HorizontalAlignment="Left" Height="23" Margin="119,271,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="69" RenderTransformOrigin="0.5,0.5" TextChanged="kodpocztextChangedEventHandler" />
         <Label Content="Miejscowość" HorizontalAlignment="Left" Margin="197,270,0,0" VerticalAlignment="Top" Width="77"/>
-        <TextBox x:Name="miejscowosc" HorizontalAlignment="Left" Height="23" Margin="281,271,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="158" RenderTransformOrigin="0.5,0.5"/>
+        <TextBox x:Name="miejscowosc" HorizontalAlignment="Left" Height="23" Margin="281,271,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="158" RenderTransformOrigin="0.5,0.5" TextChanged="miejscowosc_TextChanged"/>
         <Label Content="Priorytet 1" HorizontalAlignment="Left" Margin="475,238,0,0" VerticalAlignment="Top" Width="71"/>
-        <ComboBox x:Name="Prio1" HorizontalAlignment="Left" Margin="560,240,0,0" VerticalAlignment="Top" Width="42"/>
+        <ComboBox x:Name="Prio1" HorizontalAlignment="Left" Margin="560,240,0,0" VerticalAlignment="Top" Width="42" SelectionChanged="Prio1_SelectionChanged"/>
         <Label Content="Priorytet 2" HorizontalAlignment="Left" Margin="614,238,0,0" VerticalAlignment="Top" Width="71"/>
-        <ComboBox x:Name="Prio2" HorizontalAlignment="Left" Margin="690,240,0,0" VerticalAlignment="Top" Width="42"/>
+        <ComboBox x:Name="Prio2" HorizontalAlignment="Left" Margin="690,240,0,0" VerticalAlignment="Top" Width="42" SelectionChanged="Prio2_SelectionChanged"/>
         <Label Content="Ubiegam się o miejsce w DS nr:" HorizontalAlignment="Left" Margin="475,209,0,0" VerticalAlignment="Top" Width="230"/>
         <Label Content="Ubiegam się o miejsce dla współmałżonka" HorizontalAlignment="Left" Margin="31,326,0,0" VerticalAlignment="Top" Width="243"/>
-        <RadioButton x:Name="malzonekTAK" GroupName="malzonek" Content="tak" HorizontalAlignment="Left" Margin="270,332,0,0" VerticalAlignment="Top" />
-        <RadioButton x:Name="malzonekNIE" GroupName="malzonek" Content="nie" HorizontalAlignment="Left" Margin="320,332,0,0" VerticalAlignment="Top" IsChecked="true" />
+        <RadioButton x:Name="malzonekTAK" GroupName="malzonek" Content="tak" HorizontalAlignment="Left" Margin="270,332,0,0" VerticalAlignment="Top"/>
+        <RadioButton x:Name="malzonekNIE" GroupName="malzonek" Content="nie" HorizontalAlignment="Left" Margin="320,332,0,0" VerticalAlignment="Top" IsChecked="false" Checked="malzonekNIE_Checked"/>
         <Label Content="Imię  i nazwisko wpółmałżonka" HorizontalAlignment="Left" Margin="31,357,0,0" VerticalAlignment="Top" Width="182"/>
-        <TextBox x:Name="MalzImieNazw" HorizontalAlignment="Left" Height="23" Margin="213,357,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="157" RenderTransformOrigin="0.5,0.5"/>
+        <TextBox x:Name="MalzImieNazw" HorizontalAlignment="Left" Height="23" Margin="213,357,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="157" RenderTransformOrigin="0.5,0.5" TextChanged="MalzImieNazw_TextChanged"/>
         <Label Content="Współmałżonek jest" HorizontalAlignment="Left" Margin="31,392,0,0" VerticalAlignment="Top" Width="122"/>
         <ComboBox HorizontalAlignment="Left" Margin="153,392,0,0" VerticalAlignment="Top" Width="217"/>
         <Label Content="Ubiegam się o miejsce normatywne dla dziecka" HorizontalAlignment="Left" Margin="31,423,0,0" VerticalAlignment="Top" Width="261"/>
-        <RadioButton x:Name="dzieckoTAK" GroupName="dziecko" Content="tak" HorizontalAlignment="Left" Margin="302,429,0,0" VerticalAlignment="Top" />
-        <RadioButton x:Name="dzieckoNIE" GroupName="dziecko" Content="nie" HorizontalAlignment="Left" Margin="352,429,0,0" VerticalAlignment="Top" IsChecked="true"/>
-        <TextBox x:Name="pracadlaPG" HorizontalAlignment="Left" Height="87" Margin="399,357,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="371" RenderTransformOrigin="0.5,0.5"/>
+        <RadioButton x:Name="dzieckoTAK" GroupName="dziecko" Content="tak" HorizontalAlignment="Left" Margin="302,429,0,0" VerticalAlignment="Top" Checked="dzieckoTAK_Checked"/>
+        <RadioButton x:Name="dzieckoNIE" GroupName="dziecko" Content="nie" HorizontalAlignment="Left" Margin="352,429,0,0" VerticalAlignment="Top" IsChecked="false" Checked="dzieckoNIE_Checked"/>
+        <TextBox x:Name="pracadlaPG" HorizontalAlignment="Left" Height="87" Margin="399,357,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="371" RenderTransformOrigin="0.5,0.5" TextChanged="pracadlaPG_TextChanged"/>
         <Label Content="Praca na rzecz uczelni" HorizontalAlignment="Left" Margin="400,326,0,0" VerticalAlignment="Top" Width="243"/>
         <Label Content="INFORMACJE O RODZINIE" HorizontalAlignment="Center" Margin="343,548,557.6,0" VerticalAlignment="Top" Width="193"/>
         <Label Content="Wnioskuję od dochód uzyskany" HorizontalAlignment="Center" Margin="36,493,880.6,0" VerticalAlignment="Top" Width="177"/>
-        <RadioButton x:Name="dochUZTAK" GroupName="dochuzyskany" Content="tak" HorizontalAlignment="Left" Margin="257,499,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.631,-1.776" />
-        <RadioButton x:Name="dochUZNIE" GroupName="dochuzyskany" Content="nie" HorizontalAlignment="Left" Margin="320,499,0,0" VerticalAlignment="Top" IsChecked="true"/>
+        <RadioButton x:Name="dochUZTAK" GroupName="dochuzyskany" Content="tak" HorizontalAlignment="Left" Margin="257,499,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.631,-1.776" Checked="dochUZTAK_Checked" />
+        <RadioButton x:Name="dochUZNIE" GroupName="dochuzyskany" Content="nie" HorizontalAlignment="Left" Margin="320,499,0,0" VerticalAlignment="Top" IsChecked="false" Checked="dochUZNIE_Checked"/>
         <Label Content="Wnioskuję od dochód utracony" HorizontalAlignment="Center" Margin="412,493,504.6,0" VerticalAlignment="Top" Width="177"/>
-        <RadioButton x:Name="dochUTTAK" GroupName="dochutracony" Content="tak" HorizontalAlignment="Left" Margin="614,499,0,0" VerticalAlignment="Top" />
-        <RadioButton x:Name="dochUTNIE" GroupName="dochutracony" Content="nie" HorizontalAlignment="Left" Margin="670,499,0,0" VerticalAlignment="Top" IsChecked="true"/>
+        <RadioButton x:Name="dochUTTAK" GroupName="dochutracony" Content="tak" HorizontalAlignment="Left" Margin="614,499,0,0" VerticalAlignment="Top" Checked="dochUTTAK_Checked"/>
+        <RadioButton x:Name="dochUTNIE" GroupName="dochutracony" Content="nie" HorizontalAlignment="Left" Margin="670,499,0,0" VerticalAlignment="Top" IsChecked="false" Checked="dochUTNIE_Checked"/>
         <Label x:Name="pouczenie"  HorizontalAlignment="Center" Margin="815,91,22.6,0" VerticalAlignment="Top" Width="256" Height="401">
         </Label>
-        <ComboBox x:Name="WspolmazonekJest" HorizontalAlignment="Left" Margin="153,392,0,0" VerticalAlignment="Top" Width="217"/>
+        <ComboBox x:Name="WspolmazonekJest" HorizontalAlignment="Left" Margin="153,392,0,0" VerticalAlignment="Top" Width="217" SelectionChanged="WspolmazonekJest_SelectionChanged"/>
         <Button Content="Otworz plik" HorizontalAlignment="Left" Margin="31,924,0,0" VerticalAlignment="Top" Width="75" Click="OtworzButton_Click"/>
         <Button Content="Zapisz plik" HorizontalAlignment="Left" Margin="126,924,0,0" VerticalAlignment="Top" Width="75" Click="ZapiszButton_Click"/>
         <Label Content="Data" HorizontalAlignment="Left" Margin="592,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.367,-1.297"/>
-        <DatePicker x:Name="datazlozeniawniosku" HorizontalAlignment="Left" Margin="650,12,0,0" VerticalAlignment="Top" Width="164" />
-        <DataGrid x:Name="rodzinaGrid" AutoGenerateColumns="true" HorizontalAlignment="Left" Height="240" Margin="31,590,0,0" VerticalAlignment="Top" Width="717">
-        </DataGrid>
+        <DatePicker x:Name="datazlozeniawniosku" HorizontalAlignment="Left" Margin="650,12,0,0" VerticalAlignment="Top" Width="164" SelectedDateChanged="datazlozeniawniosku_SelectedDateChanged" />
+        <DataGrid x:Name="rodzinaGrid" AutoGenerateColumns="true" HorizontalAlignment="Left" Height="240" Margin="31,590,0,0" VerticalAlignment="Top" Width="717" UnloadingRow="rodzinaGrid_UnloadingRow"/>
+
         <Label x:Name="pouczenie_Copy" Content="POUCZENIE:" HorizontalAlignment="Center" Margin="815,53,22.6,0" VerticalAlignment="Top" Width="256" Height="26">
         </Label>
 
