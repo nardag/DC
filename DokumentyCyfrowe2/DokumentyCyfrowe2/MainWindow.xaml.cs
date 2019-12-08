@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DokumentyCyfrowe2;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -35,6 +36,8 @@ namespace DokumentyCyfrowe2
         static string msgError;
         static int numErrors;
         bool isLoading = false;
+        static MemoryStream memoryStream;
+        static bool isNew = true;
         public MainWindow()
         {
             InitializeComponent();
@@ -46,41 +49,80 @@ namespace DokumentyCyfrowe2
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             if (openFileDialog.ShowDialog() == true)
+            {
                 fileName = openFileDialog.FileName;
 
-            //serializacja xml -> obiekt
-            XmlSerializer serializer = new XmlSerializer(typeof(typ_wniosku));
-            FileStream fs = new FileStream(fileName, FileMode.Open);
-            XmlReader reader = XmlReader.Create(fs);
+                //serializacja xml -> obiekt
+                XmlSerializer serializer = new XmlSerializer(typeof(typ_wniosku));
+                FileStream fs = new FileStream(fileName, FileMode.Open);
+                XmlReader reader = XmlReader.Create(fs);
 
-            dokument = (typ_wniosku)serializer.Deserialize(reader);
+                dokument = (typ_wniosku)serializer.Deserialize(reader);
 
-            fs.Close();
+                fs.Close();
 
-            Load();
+                Load(fileName);
+                isNew = false;
+            }
         }
 
         private void ZapiszButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                var obj = dokument.rodzina_wnioskodawcy.czlonek_rodziny;
-                Array.Resize(ref obj, 0);
-                dokument.rodzina_wnioskodawcy.czlonek_rodziny = obj;
-                        
-                foreach (czlonek_rodziny_type a in czlonkowie)
+                if (isNew)
                 {
-                    if (a.st_pokrewienstwa != "WNIOSKODAWCA")
+                    if (dokument.wnioskodawca.imie != null &&
+                    dokument.wnioskodawca.nazwisko != null &&
+                    dokument.wnioskodawca.wydzial != null &&
+                    dokument.wnioskodawca.na_rok_akademicki != null &&
+                    dokument.wnioskodawca.nr_albumu != null)
                     {
-                        obj = dokument.rodzina_wnioskodawcy.czlonek_rodziny;
-                        Array.Resize(ref obj, obj.Length + 1);
-                        obj[obj.Length - 1] = a;
+                        czlonek_rodziny_type a = new czlonek_rodziny_type();
+                        a.imie = dokument.wnioskodawca.imie;
+                        a.nazwisko = dokument.wnioskodawca.nazwisko;
+                        var s = rodzinaGrid.Items;
+                        czlonek_rodziny_type z = (czlonek_rodziny_type)s[0];
+                        a.wiek = z.wiek;
+                        a.st_pokrewienstwa = "WNIOSKODAWCA";
+                        a.status_zatrudnienia = "POLITECHNIKA GDAŃSKA";
 
+                        if (a.wiek == null)
+                        {
+                            msgError = "Podaj wiek wnioskodawcy w tabelce";
+                            throw new System.InvalidOperationException("Podaj wiek wnioskodawcy w tabelce");
+                        }
+
+                        var obj = dokument.rodzina_wnioskodawcy.czlonek_rodziny;
+                        Array.Resize(ref obj, 1);
+                        obj[obj.Length - 1] = a;
                         dokument.rodzina_wnioskodawcy.czlonek_rodziny = obj;
+                    }
+                    else
+                        throw new NullReferenceException();
+                }
+                else
+                {
+                    var obj = dokument.rodzina_wnioskodawcy.czlonek_rodziny;
+                    Array.Resize(ref obj, 0);
+                    dokument.rodzina_wnioskodawcy.czlonek_rodziny = obj;
+
+                    foreach (czlonek_rodziny_type a in czlonkowie)
+                    {
+                        //if (a.st_pokrewienstwa != "WNIOSKODAWCA")
+                        {
+                            obj = dokument.rodzina_wnioskodawcy.czlonek_rodziny;
+                            Array.Resize(ref obj, obj.Length + 1);
+                            obj[obj.Length - 1] = a;
+
+                            dokument.rodzina_wnioskodawcy.czlonek_rodziny = obj;
+                        }
                     }
                 }
 
                 var memoryStream = new MemoryStream();
+
+
 
                 XmlWriterSettings wsettings = new XmlWriterSettings();
                 wsettings.Indent = true;
@@ -92,6 +134,9 @@ namespace DokumentyCyfrowe2
                 XmlSerializer serializer = new XmlSerializer(dokument.GetType());
                 serializer.Serialize(xmlWriter, dokument);
 
+
+
+
                 XmlReaderSettings settings = new XmlReaderSettings();
                 settings.ValidationType = ValidationType.Schema;
 
@@ -102,6 +147,7 @@ namespace DokumentyCyfrowe2
                 var xmlDoc = new XmlDocument();
                 xmlDoc.Load(xmlReader);
                 xmlDoc.Schemas.Add(null, "..\\..\\XMLSchema\\DC1.xsd");
+                               
 
                 ValidationEventHandler eventHandler = new ValidationEventHandler(ValidationEventHandler);
 
@@ -129,11 +175,11 @@ namespace DokumentyCyfrowe2
             }
             catch (NullReferenceException ex)
             {
-                MessageBox.Show("Probujesz zapisac pusty dokument. Wypelnij pola.", "Exception Sample", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Probujesz niepełny pusty dokument. Wypelnij wszystkie czerwone pola.", "Brakuje danych", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(msgError, "Exception Sample", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(msgError, "Wprowadzono błędne dane", MessageBoxButton.OK, MessageBoxImage.Warning);
                 numErrors = 0;
                 msgError = "";
             }
@@ -142,19 +188,45 @@ namespace DokumentyCyfrowe2
 
         static void ValidationEventHandler(object sender, ValidationEventArgs e)
         {
-            //TODO 
             if (!e.Exception.Message.Contains("pouczenie"))
             {
-                msgError = msgError + "\r\n" + e.Message + " " + e.Exception.LineNumber;
+                var exception = (XmlSchemaValidationException)e.Exception;
+                System.Xml.XmlElement sourceObject = (System.Xml.XmlElement)exception.SourceObject;
+
+                msgError += "Niepoprawny format " + sourceObject.Name + "\r\n";
                 numErrors++;
             }
         }
 
         private void LoadEmpty()
         {
+            string po = "Wnoszę o przyznanie mi prawa do zamieszkania w Domach Studenckich PG."+
+         "\n    Oświadczam, iż zapoznałem się z Regulaminem przyznawania prawa do zamieszkania w Domach Studenckich Politechniki Gdańskiej."+
+         "\n    Oświadczam, że gospodarstwo domowe nie osiąga dochodów ze źródeł innych niż wskazane."+
+         "\n    Uprzedzony o odpowiedzialności karnej za przestępstwo wyłudzenia nienależnych świadczeń finansowych(art. 286 KK) oświadczam, że wykazane" +
+         " dane są kompletne i zgodne ze stanem faktycznym."+
+         "\n    Oświadczam, iż uprzedzono mnie, że w przypadku, gdy okaże się, że otrzywąłem/ łam prawo do zamieszkania w Domu Studenckim PG na podstawie" +
+         " nieprawdziwych danych, będą wyciągnięte wobec mnie konsekwencje dyscyplinarne, do wydalenia z Uczelni włącznie, niezależnie od skutków cywilnoprawnych.";
+
+            pouczenie.Content = new TextBlock() { Text = po, TextWrapping = TextWrapping.Wrap };
+
+            dokument = new typ_wniosku();
+            dokument.pouczenie = pouczenie.Content.ToString();
+            dokument.wnioskodawca = new wnioskodawca_type();
+            dokument.wnioskodawca.rodzaj_studiow = rodzaj_studiow_type.Istopnia;
+            dokument.wnioskodawca.miejsce_dla_dziecka = true;
+            dokument.rodzina_wnioskodawcy = new rodzina_wnioskodawcy_type();
+            dokument.rodzina_wnioskodawcy.dochod_uzyskany = false;
+            dokument.rodzina_wnioskodawcy.dochod_utracony = false;
+            dokument.wnioskodawca.adres = new adres_type();
+            dokument.wnioskodawca.nr_ds_priorytet1 = "1";
+            dokument.wnioskodawca.nr_ds_priorytet2 = "1";
+
             isLoading = true;
             foreach (wydzial_type w in Enum.GetValues(typeof(wydzial_type)))
                 Wydzial.Items.Add(w);
+            foreach (wojewodztwo_type w in Enum.GetValues(typeof(wojewodztwo_type)))
+                wojewodztwo.Items.Add(w);
 
             Rokakademicki.Items.Add("2015/2016");
             Rokakademicki.Items.Add("2016/2017");
@@ -166,11 +238,38 @@ namespace DokumentyCyfrowe2
             for (int a = 1; a < 8; a++)
                 przewidywanysemestr.Items.Add(a.ToString());
 
+            var type = typeof(kierunek_type);
             foreach (kierunek_type k in Enum.GetValues(typeof(kierunek_type)))
-                kierunek.Items.Add(k);
+            {
+                var memInfo = type.GetMember(k.ToString());
+                string value;
+                if (memInfo[0].CustomAttributes.Count() != 0)
+                {
+                    var attributes = memInfo[0].GetCustomAttributes(typeof(XmlEnumAttribute), false);
+                    //if (attributes.Length != 0)
+                    value = ((XmlEnumAttribute)attributes[0]).Name;
+                }
+                else
+                    value = memInfo[0].Name;
+                //    value = k.ToString();
 
+                kierunek.Items.Add(value);
+            }
+
+
+            type = typeof(status_malzonka_type);
             foreach (status_malzonka_type k in Enum.GetValues(typeof(status_malzonka_type)))
-                WspolmazonekJest.Items.Add(k);
+            {
+                var memInfo = type.GetMember(k.ToString());
+                string value;
+                var attributes = memInfo[0].GetCustomAttributes(typeof(XmlEnumAttribute), false);
+                if (attributes.Length != 0)
+                    value = ((XmlEnumAttribute)attributes[0]).Name;
+                else
+                    value = k.ToString();
+
+                WspolmazonekJest.Items.Add(value);
+            }
 
             for (int a = 1; a < 13; a++)
             {
@@ -183,10 +282,11 @@ namespace DokumentyCyfrowe2
 
             czlonkowie.Add(new czlonek_rodziny_type { status_zatrudnienia = "POLITECHNIKA GDANSKA", st_pokrewienstwa = "WNIOSKODAWCA" });
             rodzinaGrid.ItemsSource = czlonkowie;
+
             isLoading = false;
         }
 
-        private void Load()
+        private void Load(string filename)
         {
             isLoading = true;
             czlonkowie.Clear();
@@ -201,6 +301,8 @@ namespace DokumentyCyfrowe2
             Wydzial.SelectedItem = dokument.wnioskodawca.wydzial;
             Album.Text = dokument.wnioskodawca.nr_albumu;
             Rokakademicki.SelectedItem = dokument.wnioskodawca.na_rok_akademicki;
+
+            wojewodztwo.SelectedItem = dokument.wnioskodawca.wojewodztwo;
 
             Imie.Text = dokument.wnioskodawca.imie;
             Nazwisko.Text = dokument.wnioskodawca.nazwisko;
@@ -219,6 +321,9 @@ namespace DokumentyCyfrowe2
             nr.Text = dokument.wnioskodawca.adres.nr;
             kodpocz.Text = dokument.wnioskodawca.adres.kod_pocztowy;
             miejscowosc.Text = dokument.wnioskodawca.adres.miejscowosc;
+            powiat.Text = dokument.wnioskodawca.powiat;
+            gmina.Text = dokument.wnioskodawca.gmina;
+
 
             Prio1.SelectedItem = dokument.wnioskodawca.nr_ds_priorytet1;
             Prio2.SelectedItem = dokument.wnioskodawca.nr_ds_priorytet2;
@@ -273,46 +378,77 @@ namespace DokumentyCyfrowe2
                 }
             }
             Random rnd = new Random();
-            czlonkowie.First<czlonek_rodziny_type>().wiek = rnd.Next(18, 27).ToString();
+            if (dokument.rodzina_wnioskodawcy.czlonek_rodziny[0].wiek == null)
+                czlonkowie.First<czlonek_rodziny_type>().wiek = rnd.Next(18, 27).ToString();
+            else
+                czlonkowie.First<czlonek_rodziny_type>().wiek = dokument.rodzina_wnioskodawcy.czlonek_rodziny[0].wiek;
             czlonkowie.First<czlonek_rodziny_type>().imie = dokument.wnioskodawca.imie;
             czlonkowie.First<czlonek_rodziny_type>().nazwisko = dokument.wnioskodawca.nazwisko;
 
             rodzinaGrid.ItemsSource = czlonkowie;
+
+
+
+
+            try
+            {
+                XmlReaderSettings settings = new XmlReaderSettings();
+                settings.ValidationType = ValidationType.Schema;
+                settings.Schemas.Add(null, "..\\..\\XMLSchema\\DC1.xsd");
+
+
+                var xmlReader = XmlReader.Create(filename, settings);
+                var xmlDoc = new XmlDocument();
+                xmlDoc.Load(xmlReader);
+
+                ValidationEventHandler eventHandler = new ValidationEventHandler(ValidationEventHandler);
+
+                xmlDoc.Validate(eventHandler);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Plik nieprawidłowo sformatowany", "Błącz wczytania pliku", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+
+
+
+
             isLoading = false;
         }
 
-        private void kodpocztextChangedEventHandler(object sender, TextChangedEventArgs args) => dokument.wnioskodawca.adres.kod_pocztowy = kodpocz.Text;
+
 
         private void Wydzial_SelectionChanged(object sender, SelectionChangedEventArgs e) => dokument.wnioskodawca.wydzial = (wydzial_type)Wydzial.SelectedItem;
 
-        private void Album_TextChanged(object sender, TextChangedEventArgs e) => dokument.wnioskodawca.nr_albumu = Album.Text;
-
         private void Rokakademicki_SelectionChanged(object sender, SelectionChangedEventArgs e) => dokument.wnioskodawca.na_rok_akademicki = Rokakademicki.SelectedItem.ToString();
-
-        private void Imie_TextChanged(object sender, TextChangedEventArgs e) => dokument.wnioskodawca.imie = Imie.Text;
-
-        private void Nazwisko_TextChanged(object sender, TextChangedEventArgs e) => dokument.wnioskodawca.nazwisko = Nazwisko.Text;
 
         private void przewidywanysemestr_SelectionChanged(object sender, SelectionChangedEventArgs e) => dokument.wnioskodawca.przewidywany_sem_studiow = przewidywanysemestr.SelectedItem.ToString();
 
-        private void kierunek_SelectionChanged(object sender, SelectionChangedEventArgs e) => dokument.wnioskodawca.kierunek = (kierunek_type)kierunek.SelectedItem;
-
-        private void email_TextChanged(object sender, TextChangedEventArgs e) => dokument.wnioskodawca.email = email.Text;
-
-        private void telefon_TextChanged(object sender, TextChangedEventArgs e) => dokument.wnioskodawca.telefon = telefon.Text;
-
-        private void ulica_TextChanged(object sender, TextChangedEventArgs e) => dokument.wnioskodawca.adres.ulica = ulica.Text;
-
-        private void nr_TextChanged(object sender, TextChangedEventArgs e) => dokument.wnioskodawca.adres.nr = nr.Text;
-
-        private void miejscowosc_TextChanged(object sender, TextChangedEventArgs e)
+        private void kierunek_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            dokument.wnioskodawca.adres.miejscowosc = miejscowosc.Text;
+            var type = typeof(kierunek_type);
+            foreach (kierunek_type k in Enum.GetValues(typeof(kierunek_type)))
+            {
+                var memInfo = type.GetMember(k.ToString());
+                string value;
+                if (memInfo[0].CustomAttributes.Count() != 0)
+                {
+                    var attributes = memInfo[0].GetCustomAttributes(typeof(XmlEnumAttribute), false);
+                    value = ((XmlEnumAttribute)attributes[0]).Name;
+                }
+                else
+                    value = memInfo[0].Name;
+
+                if (value == kierunek.SelectedItem.ToString())
+                {
+                    dokument.wnioskodawca.kierunek = k;
+                }
+            }
         }
 
         private void Prio1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            dokument.wnioskodawca.nr_ds_priorytet1 = Prio1.SelectedItem.ToString();
+                dokument.wnioskodawca.nr_ds_priorytet1 = Prio1.SelectedItem.ToString();
         }
 
         private void Prio2_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -320,32 +456,29 @@ namespace DokumentyCyfrowe2
             dokument.wnioskodawca.nr_ds_priorytet2 = Prio2.SelectedItem.ToString();
         }
 
-        private void MalzImieNazw_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if(malzonekTAK.IsChecked == true)
-                dokument.wnioskodawca.malzonek.imie_i_nazwisko = MalzImieNazw.Text;
-        }
+
 
         private void WspolmazonekJest_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (malzonekTAK.IsChecked == true)
+            {
+                WspolmazonekJest.SelectedItem.ToString().Replace(" ", string.Empty);
+
                 dokument.wnioskodawca.malzonek.status = (status_malzonka_type)WspolmazonekJest.SelectedItem;
+            }
         }
 
-        private void pracadlaPG_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            dokument.wnioskodawca.praca_na_rzecz_uczelni = pracadlaPG.Text;
-        }
+
 
         private void datazlozeniawniosku_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(dokument != null)
+            if (dokument != null)
                 dokument.data_zlozenia = (System.DateTime)datazlozeniawniosku.SelectedDate;
         }
 
         private void st1_Checked(object sender, RoutedEventArgs e)
         {
-            if (isLoading == false)
+            if (isLoading == false && dokument != null)
                 dokument.wnioskodawca.rodzaj_studiow = rodzaj_studiow_type.Istopnia;
         }
 
@@ -357,13 +490,13 @@ namespace DokumentyCyfrowe2
 
         private void malzonekNIE_Checked(object sender, RoutedEventArgs e)
         {
-            if (isLoading == false)
+            if (isLoading == false && dokument != null)
                 dokument.wnioskodawca.malzonek = null;
         }
 
         private void dochUZTAK_Checked(object sender, RoutedEventArgs e)
         {
-            if (isLoading == false)                
+            if (isLoading == false)
                 dokument.rodzina_wnioskodawcy.dochod_uzyskany = true;
         }
 
@@ -375,13 +508,13 @@ namespace DokumentyCyfrowe2
 
         private void dzieckoNIE_Checked(object sender, RoutedEventArgs e)
         {
-            if (isLoading == false)
+            if (isLoading == false && dokument != null)
                 dokument.wnioskodawca.miejsce_dla_dziecka = false;
         }
 
         private void dochUZNIE_Checked(object sender, RoutedEventArgs e)
         {
-            if (isLoading == false)
+            if (isLoading == false && dokument != null)
                 dokument.rodzina_wnioskodawcy.dochod_uzyskany = false;
         }
 
@@ -393,13 +526,88 @@ namespace DokumentyCyfrowe2
 
         private void dochUTNIE_Checked(object sender, RoutedEventArgs e)
         {
-            if (isLoading == false)
+            if (isLoading == false && dokument != null)
                 dokument.rodzina_wnioskodawcy.dochod_utracony = false;
-        } 
+        }
 
-        private void rodzinaGrid_UnloadingRow(object sender, DataGridRowEventArgs e)
+        private void malzonekTAK_Checked(object sender, RoutedEventArgs e)
         {
-            //TODO remove this function
+            dokument.wnioskodawca.malzonek = new malzonek_type();
+        }
+
+        private void Imie_LostFocus(object sender, RoutedEventArgs e)
+        {
+            dokument.wnioskodawca.imie = Imie.Text;
+        }
+
+        private void Album_LostFocus(object sender, RoutedEventArgs e)
+        {
+            dokument.wnioskodawca.nr_albumu = Album.Text;
+        }
+
+        private void Nazwisko_LostFocus(object sender, RoutedEventArgs e)
+        {
+            dokument.wnioskodawca.nazwisko = Nazwisko.Text;
+        }
+
+        private void email_LostFocus(object sender, RoutedEventArgs e)
+        {
+            dokument.wnioskodawca.email = email.Text;
+        }
+
+        private void telefon_LostFocus(object sender, RoutedEventArgs e)
+        {
+            dokument.wnioskodawca.telefon = telefon.Text;
+        }
+
+        private void ulica_LostFocus(object sender, RoutedEventArgs e)
+        {
+            dokument.wnioskodawca.adres.ulica = ulica.Text;
+        }
+
+        private void nr_LostFocus(object sender, RoutedEventArgs e)
+        {
+            dokument.wnioskodawca.adres.nr = nr.Text;
+        }
+
+        private void kodpocz_LostFocus(object sender, RoutedEventArgs e)
+        {
+            dokument.wnioskodawca.adres.kod_pocztowy = kodpocz.Text;
+        }
+
+        private void miejscowosc_LostFocus(object sender, RoutedEventArgs e)
+        {
+            dokument.wnioskodawca.adres.miejscowosc = miejscowosc.Text;
+
+        }
+
+        private void MalzImieNazw_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (malzonekTAK.IsChecked == true)
+                dokument.wnioskodawca.malzonek.imie_i_nazwisko = MalzImieNazw.Text;
+        }
+
+        private void pracadlaPG_LostFocus_1(object sender, RoutedEventArgs e)
+        {
+            dokument.wnioskodawca.praca_na_rzecz_uczelni = pracadlaPG.Text;
+
+        }
+
+        private void wojewodztwo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            dokument.wnioskodawca.wojewodztwo = (wojewodztwo_type)wojewodztwo.SelectedItem;
+        }
+
+        private void powiat_LostFocus(object sender, RoutedEventArgs e)
+        {
+            dokument.wnioskodawca.powiat = powiat.Text;
+
+        }
+
+        private void gmina_LostFocus(object sender, RoutedEventArgs e)
+        {
+            dokument.wnioskodawca.gmina = gmina.Text;
+
         }
     }
 }
