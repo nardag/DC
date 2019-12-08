@@ -26,5 +26,6 @@ C:\Users\me\Documents\DC\DokumentyCyfrowe2\DokumentyCyfrowe2\obj\Debug\Dokumenty
 C:\Users\me\Documents\DC\DokumentyCyfrowe2\DokumentyCyfrowe2\obj\Debug\DokumentyCyfrowe2.csproj.GenerateResource.cache
 C:\Users\me\Documents\DC\DokumentyCyfrowe2\DokumentyCyfrowe2\obj\Debug\DokumentyCyfrowe2.exe
 C:\Users\me\Documents\DC\DokumentyCyfrowe2\DokumentyCyfrowe2\obj\Debug\DokumentyCyfrowe2.pdb
-C:\Users\me\Documents\DC\DokumentyCyfrowe2\DokumentyCyfrowe2\bin\Debug\schema.dll
 C:\Users\me\Documents\DC\DokumentyCyfrowe2\DokumentyCyfrowe2\obj\Debug\DokumentyCyfrowe2.csproj.CopyComplete
+C:\Users\me\Documents\DC\DokumentyCyfrowe2\DokumentyCyfrowe2\bin\Debug\xsdlib.dll
+C:\Users\me\Documents\DC\DokumentyCyfrowe2\DokumentyCyfrowe2\bin\Debug\xsdlib.pdb

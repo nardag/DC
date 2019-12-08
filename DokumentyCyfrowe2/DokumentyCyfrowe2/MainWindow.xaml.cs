@@ -1,5 +1,4 @@
-﻿using DokumentyCyfrowe2;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +18,7 @@ using System.Xml.Schema;
 using System.IO;
 using Microsoft.Win32;
 using System.Data;
+using System.Reflection;
 
 namespace DokumentyCyfrowe2
 {
@@ -50,8 +50,7 @@ namespace DokumentyCyfrowe2
             OpenFileDialog openFileDialog = new OpenFileDialog();
             if (openFileDialog.ShowDialog() == true)
             {
-                fileName = openFileDialog.FileName;
-
+                fileName = openFileDialog.FileName;                
                 //serializacja xml -> obiekt
                 XmlSerializer serializer = new XmlSerializer(typeof(typ_wniosku));
                 FileStream fs = new FileStream(fileName, FileMode.Open);
@@ -146,8 +145,21 @@ namespace DokumentyCyfrowe2
 
                 var xmlDoc = new XmlDocument();
                 xmlDoc.Load(xmlReader);
-                xmlDoc.Schemas.Add(null, "..\\..\\XMLSchema\\DC1.xsd");
-                               
+                //xmlDoc.Schemas.Add(null, "..\\..\\XMLSchema\\DC1.xsd");
+
+
+                //////
+                string xsdString = xsdlib.Resource.DC1;
+                XmlSchema schema;
+                using(StringReader xsdReader = new StringReader(xsdString))
+                {
+                    schema = XmlSchema.Read(xsdReader, null);
+                }
+                //////
+
+                xmlDoc.Schemas.Add(schema);
+
+
 
                 ValidationEventHandler eventHandler = new ValidationEventHandler(ValidationEventHandler);
 
@@ -394,7 +406,20 @@ namespace DokumentyCyfrowe2
             {
                 XmlReaderSettings settings = new XmlReaderSettings();
                 settings.ValidationType = ValidationType.Schema;
-                settings.Schemas.Add(null, "..\\..\\XMLSchema\\DC1.xsd");
+
+                //////
+                string xsdString = xsdlib.Resource.DC1;
+                XmlSchema schema;
+                using (StringReader xsdReader = new StringReader(xsdString))
+                {
+                    schema = XmlSchema.Read(xsdReader, null);
+                }
+                //////
+
+                settings.Schemas.Add(schema);
+
+
+                //settings.Schemas.Add(null, "..\\..\\XMLSchema\\DC1.xsd");
 
 
                 var xmlReader = XmlReader.Create(filename, settings);
