@@ -38,6 +38,14 @@ namespace DokumentyCyfrowe2
         bool isLoading = false;
         static MemoryStream memoryStream;
         static bool isNew = true;
+        static string po = "Wnoszę o przyznanie mi prawa do zamieszkania w Domach Studenckich PG." +
+"\n    Oświadczam, iż zapoznałem się z Regulaminem przyznawania prawa do zamieszkania w Domach Studenckich Politechniki Gdańskiej." +
+"\n    Oświadczam, że gospodarstwo domowe nie osiąga dochodów ze źródeł innych niż wskazane." +
+"\n    Uprzedzony o odpowiedzialności karnej za przestępstwo wyłudzenia nienależnych świadczeń finansowych(art. 286 KK) oświadczam, że wykazane" +
+" dane są kompletne i zgodne ze stanem faktycznym." +
+"\n    Oświadczam, iż uprzedzono mnie, że w przypadku, gdy okaże się, że otrzywąłem/ łam prawo do zamieszkania w Domu Studenckim PG na podstawie" +
+" nieprawdziwych danych, będą wyciągnięte wobec mnie konsekwencje dyscyplinarne, do wydalenia z Uczelni włącznie, niezależnie od skutków cywilnoprawnych.";
+
         public MainWindow()
         {
             InitializeComponent();
@@ -71,6 +79,7 @@ namespace DokumentyCyfrowe2
             {
                 if (isNew)
                 {
+                    dokument.pouczenie = po;
                     if (dokument.wnioskodawca.imie != null &&
                     dokument.wnioskodawca.nazwisko != null &&
                     dokument.wnioskodawca.wydzial != null &&
@@ -212,13 +221,6 @@ namespace DokumentyCyfrowe2
 
         private void LoadEmpty()
         {
-            string po = "Wnoszę o przyznanie mi prawa do zamieszkania w Domach Studenckich PG."+
-         "\n    Oświadczam, iż zapoznałem się z Regulaminem przyznawania prawa do zamieszkania w Domach Studenckich Politechniki Gdańskiej."+
-         "\n    Oświadczam, że gospodarstwo domowe nie osiąga dochodów ze źródeł innych niż wskazane."+
-         "\n    Uprzedzony o odpowiedzialności karnej za przestępstwo wyłudzenia nienależnych świadczeń finansowych(art. 286 KK) oświadczam, że wykazane" +
-         " dane są kompletne i zgodne ze stanem faktycznym."+
-         "\n    Oświadczam, iż uprzedzono mnie, że w przypadku, gdy okaże się, że otrzywąłem/ łam prawo do zamieszkania w Domu Studenckim PG na podstawie" +
-         " nieprawdziwych danych, będą wyciągnięte wobec mnie konsekwencje dyscyplinarne, do wydalenia z Uczelni włącznie, niezależnie od skutków cywilnoprawnych.";
 
             pouczenie.Content = new TextBlock() { Text = po, TextWrapping = TextWrapping.Wrap };
 
@@ -324,7 +326,36 @@ namespace DokumentyCyfrowe2
                 st1.IsChecked = true;
             else
                 st2.IsChecked = true;
-            kierunek.SelectedItem = dokument.wnioskodawca.kierunek;
+
+
+
+
+
+
+            var type = typeof(kierunek_type);
+            foreach (kierunek_type k in Enum.GetValues(typeof(kierunek_type)))
+            {
+                var memInfo = type.GetMember(k.ToString());
+                string value;
+                if (memInfo[0].CustomAttributes.Count() != 0)
+                {
+                    var attributes = memInfo[0].GetCustomAttributes(typeof(XmlEnumAttribute), false);
+                    value = ((XmlEnumAttribute)attributes[0]).Name;
+                }
+                else
+                    value = memInfo[0].Name;
+
+                if (value == dokument.wnioskodawca.kierunek.ToString())
+                {
+                    //dokument.wnioskodawca.kierunek = k;
+                    kierunek.SelectedItem = value;
+
+                }
+            }
+
+
+
+
 
             email.Text = dokument.wnioskodawca.email;
             telefon.Text = dokument.wnioskodawca.telefon;
@@ -432,7 +463,8 @@ namespace DokumentyCyfrowe2
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Plik nieprawidłowo sformatowany", "Błącz wczytania pliku", MessageBoxButton.OK, MessageBoxImage.Warning);
+                if (!ex.Message.Contains("pouczenie"))
+                    MessageBox.Show("Plik nieprawidłowo sformatowany", "Błącz wczytania pliku", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
 
 
@@ -633,6 +665,20 @@ namespace DokumentyCyfrowe2
         {
             dokument.wnioskodawca.gmina = gmina.Text;
 
+        }
+
+        private void data_urodzenia_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            TimeSpan span = datazlozeniawniosku.SelectedDate.Value - data_urodzenia.SelectedDate.Value;
+            
+            DateTime zeroTime = new DateTime(1, 1, 1);
+
+            // Because we start at year 1 for the Gregorian
+            // calendar, we must subtract a year here.
+            int years = (zeroTime + span).Year - 1;
+            czlonkowie[0].wiek = years.ToString();
+            rodzinaGrid.ItemsSource = null;
+            rodzinaGrid.ItemsSource = czlonkowie;
         }
     }
 }

@@ -87,6 +87,8 @@
         <TextBox x:Name="powiat" HorizontalAlignment="Left" Height="23" Margin="378,354,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="158" RenderTransformOrigin="0.5,0.5" LostFocus="powiat_LostFocus" Grid.Column="1"/>
         <TextBox x:Name="gmina" HorizontalAlignment="Left" Height="23" Margin="378,395,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="158" RenderTransformOrigin="0.5,0.5" LostFocus="gmina_LostFocus" Grid.Column="1"/>
         <Label Foreground="#FF0000" x:Name="pouczenie_Copy1" Content="CZERWONE POLA MUSZĄ BYĆ WYPEŁNIONE!" HorizontalAlignment="Center" Margin="646.2,560,22.6,0" VerticalAlignment="Top" Width="256" Height="38" Grid.Column="1"/>
-    </Grid>
+        <DatePicker x:Name="data_urodzenia"  HorizontalAlignment="Left" Margin="352.2,497,0,0" VerticalAlignment="Top" Width="164" SelectedDateChanged="data_urodzenia_SelectedDateChanged" Grid.Column="1" />
+        <Label Content="Data urodzenia: " HorizontalAlignment="Left" Margin="378.2,462,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.367,-1.297" Grid.Column="1" Width="118"/>
+        </Grid>
         </ScrollViewer>
 </Window>
