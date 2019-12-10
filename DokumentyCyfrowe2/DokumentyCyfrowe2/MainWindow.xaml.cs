@@ -19,6 +19,8 @@ using System.IO;
 using Microsoft.Win32;
 using System.Data;
 using System.Reflection;
+using System.Net;
+using HtmlAgilityPack;
 
 namespace DokumentyCyfrowe2
 {
@@ -627,9 +629,65 @@ namespace DokumentyCyfrowe2
             dokument.wnioskodawca.adres.nr = nr.Text;
         }
 
+        //Function for parsing HTML with stock data and displaying these data in a data grid view table 
+        private void parseHTML()
+        {
+            try
+            {
+                char cyfra = kodpocz.Text.First<char>();
+                //int okreg = Convert.ToInt32(cyfra);
+                string suffix;
+                //for (int i = 0; i < 10; i++)
+                {
+                    if (cyfra == '0')
+                        suffix = string.Empty;
+                    else 
+                        suffix = "/okreg" + cyfra + ".php";
+
+                    WebClient webc = new WebClient(); //Create a web client to fetch the HTML string
+                        string htmlString = webc.DownloadString("https://www.kody-pocztowe.dokladnie.com" + suffix);
+
+                    HtmlAgilityPack.HtmlDocument document = new HtmlAgilityPack.HtmlDocument(); //Create new HTML document object
+                    document.LoadHtml(htmlString); //Load the downloaded string to the document 
+
+                    //Select the whole table with data (use XPath expressions basing on the tags from the HTML source)  
+                    HtmlNode tableList = document.DocumentNode.SelectSingleNode("(//table)[3]");
+                    //HtmlNodeCollection tableRows = tableList.SelectNodes("tr[@class='button']");
+
+                    // Using LINQ to parse HTML table smartly 
+                    bool header = true;
+                    foreach (var row in tableList.SelectNodes("tr"))
+                    {
+                        if (header)
+                        {
+                            // skip header
+                            header = false;
+                            continue;
+                        }
+                        foreach (var rowtd in row.SelectNodes("td"))
+                        {
+                            if (rowtd.InnerText == kodpocz.Text)
+                            {
+                                var a = row.ChildNodes;
+                                string miasto = a[2].InnerText;
+                                miejscowosc.Text = miasto;
+                                return;
+                            }
+                        }
+                    }
+                }
+                }
+            catch (Exception x)
+            {
+                MessageBox.Show("Brak miasta o takim kodzie pocztowym");
+            }
+        }
+
         private void kodpocz_LostFocus(object sender, RoutedEventArgs e)
         {
             dokument.wnioskodawca.adres.kod_pocztowy = kodpocz.Text;
+
+            parseHTML();
         }
 
         private void miejscowosc_LostFocus(object sender, RoutedEventArgs e)

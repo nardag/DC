@@ -29,3 +29,6 @@ C:\Users\me\Documents\DC\DokumentyCyfrowe2\DokumentyCyfrowe2\obj\Debug\Dokumenty
 C:\Users\me\Documents\DC\DokumentyCyfrowe2\DokumentyCyfrowe2\obj\Debug\DokumentyCyfrowe2.csproj.CopyComplete
 C:\Users\me\Documents\DC\DokumentyCyfrowe2\DokumentyCyfrowe2\bin\Debug\xsdlib.dll
 C:\Users\me\Documents\DC\DokumentyCyfrowe2\DokumentyCyfrowe2\bin\Debug\xsdlib.pdb
+C:\Users\me\Documents\DC\DokumentyCyfrowe2\DokumentyCyfrowe2\bin\Debug\HtmlAgilityPack.dll
+C:\Users\me\Documents\DC\DokumentyCyfrowe2\DokumentyCyfrowe2\bin\Debug\HtmlAgilityPack.pdb
+C:\Users\me\Documents\DC\DokumentyCyfrowe2\DokumentyCyfrowe2\bin\Debug\HtmlAgilityPack.xml
